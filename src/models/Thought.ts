@@ -44,3 +44,27 @@ const reactionSchema = new Schema<IReaciton>(
       _id: false,
     }
 );
+
+const thoughtSchema = new Schema<IThought>(
+    {
+      thoughtText: {
+        type: String,
+        required: true,
+        minLength: 1,
+        maxlength: 280,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+        get:(timestamp: Date) => timestamp.toLocaleString(),
+      },
+      reactions: [reactionSchema],
+    },
+    {
+      toJSON: {
+        virtuals: true,
+        getters: true,
+      },
+      id: false,
+    }
+);
