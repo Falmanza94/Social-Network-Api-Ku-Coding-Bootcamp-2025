@@ -1,4 +1,4 @@
-import { Schema, model, Types, Document } from 'mongoose';
+import { Schema, model, Types, Document, SchemaTypeOptions } from 'mongoose';
 
 interface IReaciton {
     reactionId: Types.ObjectId;
@@ -33,8 +33,10 @@ const reactionSchema = new Schema<IReaciton>(
       createdAt: {
         type: Date,
         default: Date.now,
-        get: (timestamp: Date) => timestamp.toLocaleString(),
-      },
+        get: (timestamp: Date): string => {
+            return timestamp.toLocaleString();
+        },
+      } as unknown as SchemaTypeOptions<Date>,
     },
     {
       toJSON: {
@@ -56,7 +58,13 @@ const thoughtSchema = new Schema<IThought>(
       createdAt: {
         type: Date,
         default: Date.now,
-        get:(timestamp: Date) => timestamp.toLocaleString(),
+        get: (timestamp: Date): string => {
+          return timestamp.toLocaleString();
+        },
+      } as unknown as SchemaTypeOptions<Date>,
+      username: {
+        type: String,
+        required: true,
       },
       reactions: [reactionSchema],
     },
@@ -67,4 +75,12 @@ const thoughtSchema = new Schema<IThought>(
       },
       id: false,
     }
-);
+  );
+
+thoughtSchema.virtual('reactionCount').get(function(this: IThought) {
+    return this.reactions.length;
+});
+
+const Thought = model<IThought>('Thought', thoughtSchema);
+
+export default Thought;
