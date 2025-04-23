@@ -20,12 +20,12 @@ export const getSingleUser = async (req: Request, res: Response) => {
         .select('-__v');
 
       if (!user) {
-        return.res.status(404).json({ message: 'No user with this Id' });
+        return res.status(404).json({ message: 'No user with this Id' });
       }
 
-      res.json(user);
+      return res.json(user);
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
 };
 
@@ -51,9 +51,9 @@ export const updateUser = async (req: Request, res: Response) => {
         return res.status(404).json({ message: 'No user with this Id' });
       }
 
-      res.json(updatedUser);
+      return res.json(updatedUser);
     } catch (err) {
-        res.status(500).json(err);
+      return res.status(500).json(err);
     }
 };
 
@@ -68,8 +68,46 @@ export const deleteUser = async (req: Request, res: Response) => {
 
       await Thought.deleteMany({ _id: { $in: user.thoughts } });
 
-      res.json({ message: 'User and associated thoughts deleted!' });
+      return res.json({ message: 'User and associated thoughts deleted!' });
     } catch (err) {
-        res.status(500).json(err);
+      return res.status(500).json(err);
+    }
+};
+
+//POST add a friend
+export const addFriend = async (req: Request, res: Response) => {
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.params.userId,
+        { $addToSet: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status (404).json({ message: 'No user with this Id' });
+      }
+
+      return res.json(user);
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+};
+
+//DELETE add a friend
+export const removeFriend = async (req: Request, res: Response) => {
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.params.userId,
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: 'No user with this Id' });
+      }
+
+      return res.json(user);
+    } catch (err) {
+      return res.status (500).json(err);
     }
 };
