@@ -20,7 +20,7 @@ export const getSingleUser = async (req: Request, res: Response) => {
         .select('-__v');
 
       if (!user) {
-        return.res.status(404).json({ message: 'No user with this ID' });
+        return.res.status(404).json({ message: 'No user with this Id' });
       }
 
       res.json(user);
@@ -52,6 +52,23 @@ export const updateUser = async (req: Request, res: Response) => {
       }
 
       res.json(updatedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+//DELETE user by Id along with their thoughts
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+      const user = await User.findByIdAndDelete(req.params.userId);
+
+      if (!user) {
+        return res.status(404).json({ message: 'Not user with this Id'});
+      }
+
+      await Thought.deleteMany({ _id: { $in: user.thoughts } });
+
+      res.json({ message: 'User and associated thoughts deleted!' });
     } catch (err) {
         res.status(500).json(err);
     }
