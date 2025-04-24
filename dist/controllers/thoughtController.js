@@ -71,7 +71,7 @@ const deleteThought = async (req, res) => {
         if (!deletedThought) {
             return res.status(404).json({ message: 'No thought with this Id' });
         }
-        await models_1.User.findByIdAndUpdate({ username: deletedThought.username }, { $pull: { thoughts: deletedThought._id } });
+        await models_1.User.findOneAndUpdate({ username: deletedThought.username }, { $pull: { thoughts: deletedThought._id } });
         return res.json({ message: 'Thought successfully deleted!' });
     }
     catch (err) {
