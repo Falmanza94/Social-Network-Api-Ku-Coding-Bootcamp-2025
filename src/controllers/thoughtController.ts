@@ -83,7 +83,7 @@ export const deleteThought = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'No thought with this Id' });
     }
     
-    await User.findByIdAndUpdate(
+    await User.findOneAndUpdate(
       { username: deletedThought.username },
       { $pull: { thoughts: deletedThought._id } }
     );
