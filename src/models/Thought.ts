@@ -1,6 +1,6 @@
 import { Schema, model, Types, Document, SchemaTypeOptions } from 'mongoose';
 
-interface IReaciton {
+interface IReaction {
     reactionId: Types.ObjectId;
     reactionBody: string;
     username: string;
@@ -11,11 +11,11 @@ export interface IThought extends Document {
     thoughtText: string;
     createdAt: Date;
     username: string;
-    reactions: IReaciton[];
+    reactions: IReaction[];
     reactionCount?: number;
 }
 
-const reactionSchema = new Schema<IReaciton>(
+const reactionSchema = new Schema<IReaction>(
     {
       reactionId: {
         type: Schema.Types.ObjectId,
