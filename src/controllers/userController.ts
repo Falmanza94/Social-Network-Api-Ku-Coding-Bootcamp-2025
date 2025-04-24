@@ -63,7 +63,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       const user = await User.findByIdAndDelete(req.params.userId);
 
       if (!user) {
-        return res.status(404).json({ message: 'Not user with this Id'});
+        return res.status(404).json({ message: 'No user with this Id'});
       }
 
       await Thought.deleteMany({ _id: { $in: user.thoughts } });

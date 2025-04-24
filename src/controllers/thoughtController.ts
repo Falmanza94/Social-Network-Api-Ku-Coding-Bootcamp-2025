@@ -64,7 +64,7 @@ export const updateThought = async (req: Request, res: Response) => {
     );
 
     if (!updatedThought) {
-      return res.status(404).json({ message: 'Not thought with tis Id' });
+      return res.status(404).json({ message: 'No thought with this Id' });
     }
 
     return res.json(updatedThought);
@@ -120,7 +120,7 @@ export const removeReaction = async (req: Request, res: Response) => {
   try {
     const thought = await Thought.findByIdAndUpdate(
       req.params.thoughtId,
-      { pull: { reactions: { reactionId: req.params.reactionId } } },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
       { new: true, runValidators: true }
     );
     if (!thought) {
