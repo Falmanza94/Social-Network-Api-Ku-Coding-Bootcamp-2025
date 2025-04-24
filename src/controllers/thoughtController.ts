@@ -53,3 +53,44 @@ export const createThought = async (req: Request, res: Response) => {
       return res.status(500).json(err);
     }
 };
+
+//PUT update a thought
+export const updateThought = async (req: Request, res: Response) => {
+  try {
+    const updatedThought = await Thought.findByIdAndUpdate(
+      req.params.thoughtId,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedThought) {
+      return res.status(404).json({ message: 'Not thought with tis Id' });
+    }
+
+    return res.json(updatedThought);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
+
+//DELETE a thought
+export const deleteThought = async (req: Request, res: Response) => {
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(req.params.thoughtId);
+
+    if (!deletedThought) {
+      return res.status(404).json({ message: 'No thought with this Id' });
+    }
+    
+    await User.findByIdAndUpdate(
+      { username: deletedThought.username },
+      { $pull: { thoughts: deletedThought._id } }
+    );
+
+    return res.json({ message: 'Thought successfully deleted!' });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
