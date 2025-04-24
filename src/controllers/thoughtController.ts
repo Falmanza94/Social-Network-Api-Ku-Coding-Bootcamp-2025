@@ -94,3 +94,42 @@ export const deleteThought = async (req: Request, res: Response) => {
     return res.status(500).json(err);
   }
 };
+
+//POST a reaction to a thought
+export const addReaction = async (req: Request, res: Response) => {
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      req.params.thoughtId,
+      { $addToSet: { reactions: req.body } },
+      {new: true, runValidators: true }
+    );
+
+    if (!thought) {
+      return res.status(404).json({ message: 'No thought with this Id' });
+    }
+
+    return res.json(thought);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
+
+//DELETE a reaction from a thought
+export const removeReaction = async (req: Request, res: Response) => {
+  try {
+    const thought = await Thought.findByIdAndUpdate(
+      req.params.thoughtId,
+      { pull: { reactions: { reactionId: req.params.reactionId } } },
+      { new: true, runValidators: true }
+    );
+    if (!thought) {
+      return res.status(404).json({ message: 'No thought with that ID' });
+    }
+
+    return res.json(thought);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
