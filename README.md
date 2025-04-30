@@ -40,7 +40,7 @@ Test all API endpoints using Insomnia or a client of your choice — all interac
 
 ## 🎥 Demo Walkthrough Video
 Watch the full walkthrough here:
-[Watch on Google Drive]https://app.screencastify.com/v3/watch/Pz881Vrh0kfBFLhE7Jon
+[Watch on Google Drive]https://drive.google.com/file/d/1hjKMlvcWm3CZvNQLOdD59LrqW_ufxa0A/view?usp=sharing
 
 This video includes:
 Starting the server/Demonstrating GET, POST, PUT, DELETE routes/and any error handling needed.
